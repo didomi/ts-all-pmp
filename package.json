@@ -1,0 +1,19 @@
+{
+  "name": "ts-all-pmp",
+  "version": "1.0.0",
+  "description": "sandbox to debug pmps",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "prettier": "prettier --write ."
+  },
+  "authors": "Pierre Vanoverschelde",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "prettier": "^3.5.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
