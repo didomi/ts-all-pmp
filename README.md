@@ -4,7 +4,7 @@ The website [https://didomi.github.io/ts-all-pmp](https://didomi.github.io/ts-al
 
 ## 🔧 How to Use
 
-1. Open the page with the required query parameters in the URL:
+1. Open the page with the required query parameters in the URL.
 2. Modify the inputs or JSON config directly in the floating settings panel.
 3. The URL updates automatically — copy & share it to reproduce your setup.
 4. Use the ⚙️ launcher button to reopen the settings panel at any time.
