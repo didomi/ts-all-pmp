@@ -14,14 +14,22 @@ const panel = document.getElementById("container");
 const launcher = document.getElementById("launcher");
 const closeBtn = document.getElementById("close-panel");
 
+const PANEL_HIDDEN_KEY = "pmp_panel_hidden";
+
 /* Panel visibility helpers */
 function showPanel() {
   panel.classList.remove("hidden");
   launcher.style.display = "none";
+  try {
+    localStorage.setItem(PANEL_HIDDEN_KEY, "0");
+  } catch {}
 }
 function hidePanel() {
   panel.classList.add("hidden");
   launcher.style.display = "flex";
+  try {
+    localStorage.setItem(PANEL_HIDDEN_KEY, "1");
+  } catch {}
 }
 launcher.addEventListener("click", showPanel);
 closeBtn.addEventListener("click", hidePanel);
@@ -167,6 +175,15 @@ function isJSONvalid(text) {
 }
 
 window.onload = function () {
+  const isHidden = localStorage.getItem(PANEL_HIDDEN_KEY) === "1";
+
+  if (isHidden) {
+    launcher.style.display = "flex";
+  } else {
+    panel.classList.remove("hidden");
+    launcher.style.display = "none";
+  }
+
   if (config && parseInt(params.get("apply_conf")) && isValidBase64(config)) {
     window.didomiConfig = JSON.parse(atob(config));
   }
@@ -191,21 +208,19 @@ window.onload = function () {
     // PMP user token
     try {
       if (token) localStorage.setItem("didomi_auth_token", token);
-    } catch (e) {
-      console.warn("[Didomi] Unable to persist token in localStorage.", e);
-    }
+    } catch {}
 
     // Ensure container exists before loading the SDK
     ensureDidomiContainer(containerId);
 
-    // Load Didomi SDK from correct env host
+    // Load Didomi SDK from correct env
     if (!document.getElementById("didomi-loader")) {
       const script = document.createElement("script");
       script.id = "didomi-loader";
       script.type = "text/javascript";
       script.async = true;
       script.charset = "utf-8";
-      script.src = getSdkUrl(); // NEW: env-aware URL
+      script.src = getSdkUrl();
       document.body.appendChild(script);
     }
 

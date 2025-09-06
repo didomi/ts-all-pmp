@@ -397,7 +397,7 @@ textarea.invalid {
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
-  display: none; /* hidden until panel is hidden */
+  display: none;
   align-items: center;
   justify-content: center;
   transition:
@@ -463,6 +463,7 @@ textarea.invalid {
   }
   #controls {
     display: block;
+    margin: 20px 10px 0 10px;
   }
   #controls > div {
     width: 100%;

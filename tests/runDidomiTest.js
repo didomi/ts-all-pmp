@@ -9,7 +9,7 @@ const TIMEOUT = 5000;
  * @param {string} testUrl
  * @param {boolean} expectVisible - should the widget render content?
  * @param {object} options
- * @param {string|null} options.expectedText - text expected in #top-banner (error/info)
+ * @param {string|null} options.expectedText - text expected in #top-banner
  * @param {boolean} [options.hasApiKey=false] - if true, we wait for SDK readiness
  * @param {boolean} [options.hasContainerId=false] - if true, we also expect a didomi-container to be present
  * @param {boolean} [options.hasToken=false] - if true, we also expect a token to be present
@@ -38,7 +38,6 @@ async function runDidomiTest(
 
   // If we expect correct params, wait for SDK readiness
   if (hasApiKey && hasContainerId && hasToken) {
-    // didomiOnReady (if present)
     await page.evaluate(
       () =>
         new Promise((resolve) => {
@@ -115,11 +114,10 @@ async function runDidomiTest(
       await page.waitForTimeout(300);
       expect(await containerHasContent()).toBe(false);
     } else {
-      expect(true).toBe(true); // container absent => not visible
+      expect(true).toBe(true);
     }
   }
 
-  // Banner assertions (for error/info messages)
   const banner = page.locator("#top-banner");
   if (expectedText) {
     await expect(banner).toBeVisible({ timeout: TIMEOUT });

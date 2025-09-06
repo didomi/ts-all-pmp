@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <div id="container">
+    <div id="container" class="hidden">
       <button
         id="close-panel"
         aria-label="Close settings"
@@ -137,11 +137,7 @@
       </div>
 
       <div id="controls">
-        <div
-          onclick="if (typeof window.Didomi !== 'undefined') location.reload(); else console.log('Didomi is not defined. Reload with a valid API key and container ID.');"
-        >
-          Show PMP widget
-        </div>
+        <div onclick="location.reload();">Show PMP widget</div>
       </div>
     </div>
 
