@@ -1,18 +1,33 @@
 function setupTopBanner(apiKey, containerId, token, options = {}) {
   const { authError } = options;
 
-  if (!apiKey) {
-    renderBanner("❌ Error: API key is missing.");
-    return;
-  }
+  const missing = [];
+  if (!apiKey) missing.push("API key");
+  if (!containerId) missing.push("Container ID");
+  if (!token) missing.push("User token");
 
-  if (!containerId) {
-    renderBanner("❌ Error: Container ID is missing.");
-    return;
-  }
+  if (missing.length > 0) {
+    let msg;
 
-  if (!token) {
-    renderBanner("❌ Error: User token is missing.");
+    if (missing.length === 3) {
+      msg = "❌ Error: API key, container ID and user token are all missing.";
+    } else if (missing.length === 2) {
+      // Lowercase everything after the first element
+      msg =
+        "❌ Error: " +
+        missing
+          .map((field, idx) =>
+            idx === 0
+              ? field
+              : field.replace(/^([A-Z])/, (m) => m.toLowerCase()),
+          )
+          .join(" and ") +
+        " are missing.";
+    } else {
+      msg = `❌ Error: ${missing[0]} is missing.`; // single one keeps natural casing
+    }
+
+    renderBanner(msg);
     return;
   }
 

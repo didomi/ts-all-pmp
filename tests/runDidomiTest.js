@@ -27,11 +27,15 @@ async function runDidomiTest(
     hasContainerId = false,
     hasToken = false,
     commitHash,
+    skipGoto = false,
   } = options;
-  console.log("Test URL:", testUrl);
-  await page.goto(testUrl);
+  if (!skipGoto) {
+    console.log("Test URL:", testUrl);
+    await page.goto(testUrl);
+  }
 
-  const url = new URL(testUrl);
+  const effectiveUrl = skipGoto ? await page.url() : testUrl;
+  const url = new URL(effectiveUrl);
   const apiKey = url.searchParams.get("apiKey");
   const containerId = url.searchParams.get("containerId");
   const token = url.searchParams.get("token");

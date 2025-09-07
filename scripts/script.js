@@ -1,10 +1,19 @@
 const params = new URL(document.location.href).searchParams;
 const textArea = document.getElementsByTagName("textarea")[0];
 
-const token = params.get("token");
 const apiKey = params.get("apiKey");
 const containerId = params.get("containerId");
 const config = params.get("config");
+
+function getStoredToken() {
+  try {
+    return localStorage.getItem("didomi_auth_token") || "";
+  } catch {
+    return "";
+  }
+}
+const queryToken = params.get("token");
+const token = queryToken || getStoredToken();
 
 const preprod = Boolean(parseInt(params.get("preprod")));
 const staging = Boolean(parseInt(params.get("staging")));
@@ -202,12 +211,17 @@ window.onload = function () {
       window.didomiConfig.app.sdkVersion = commitHash;
     }
 
-    window.didomiConfig.components = { version: 2 };
+    const existingComponents = window.didomiConfig.components || {};
+    window.didomiConfig.components = {
+      ...existingComponents,
+      version: existingComponents.version ?? 2,
+    };
+
     window.didomiConfig.widgets = [];
 
     // PMP user token
     try {
-      if (token) localStorage.setItem("didomi_auth_token", token);
+      if (queryToken) localStorage.setItem("didomi_auth_token", queryToken);
     } catch {}
 
     // Ensure container exists before loading the SDK

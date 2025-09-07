@@ -10,7 +10,7 @@ const TOKEN = process.env.TOKEN;
 
 const INVALID_TOKEN = process.env.INVALID_TOKEN;
 
-test.describe("Default settings widget visibility", () => {
+test.describe("Visibility tests - widget only", () => {
   test.beforeEach(async ({ page }) => {
     page.on("console", (msg) => {
       if (msg.type() === "error") {
@@ -27,7 +27,38 @@ test.describe("Default settings widget visibility", () => {
   }) => {
     const url = buildTestUrl({});
     await runDidomiTest(page, url, false, {
-      expectedText: "Error: API key is missing.",
+      expectedText:
+        "Error: API key, container ID and user token are all missing.",
+    });
+  });
+
+  test("widget should NOT be visible when API key and container ID are missing", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({ token: TOKEN });
+    await runDidomiTest(page, url, false, {
+      expectedText: "Error: API key and container ID are missing.",
+      hasToken: true,
+    });
+  });
+
+  test("widget should NOT be visible when API key and user token are missing", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({ containerId: CONTAINER_ID });
+    await runDidomiTest(page, url, false, {
+      expectedText: "Error: API key and user token are missing.",
+      hasContainerId: true,
+    });
+  });
+
+  test("widget should NOT be visible when container ID and user token are missing", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({ apiKey: API_KEY });
+    await runDidomiTest(page, url, false, {
+      expectedText: "Error: Container ID and user token are missing.",
+      hasApiKey: true,
     });
   });
 
@@ -148,6 +179,27 @@ test.describe("Default settings widget visibility", () => {
       containerId: CONTAINER_ID,
       token: TOKEN,
     });
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasContainerId: true,
+      hasToken: true,
+    });
+  });
+
+  test("widget should be visible when token exists in localStorage (no token in URL)", async ({
+    page,
+  }) => {
+    // Save a valid token in localStorage so it's available when the page starts
+    await page.addInitScript(
+      ([key, val]) => {
+        try {
+          localStorage.setItem(key, val);
+        } catch {}
+      },
+      ["didomi_auth_token", TOKEN],
+    );
+
+    const url = buildTestUrl({ apiKey: API_KEY, containerId: CONTAINER_ID });
     await runDidomiTest(page, url, true, {
       hasApiKey: true,
       hasContainerId: true,

@@ -15,7 +15,7 @@ const STAGING_API_KEY = process.env.STAGING_API_KEY;
 const STAGING_CONTAINER_ID = process.env.STAGING_CONTAINER_ID;
 const STAGING_TOKEN = process.env.STAGING_TOKEN;
 
-test.describe("Dev widget visibility (env + commit hash) — token required", () => {
+test.describe("Visibility tests - widget + dev", () => {
   test.beforeEach(async ({ page }) => {
     let currentUrl = "";
     page.on("request", (request) => {
@@ -42,6 +42,7 @@ test.describe("Dev widget visibility (env + commit hash) — token required", ()
     await runDidomiTest(page, url, false, {
       expectedText: "Error: Container ID is missing.",
       hasApiKey: true,
+      hasToken: true,
     });
   });
 
